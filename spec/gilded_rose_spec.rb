@@ -86,12 +86,17 @@ describe GildedRose do
         @shop.update_quality()
         expect(@shop.items[10].quality).to eq(43)
       end
-      it "doesn't increase quality above 50 when well_in <= 10" do
+      it "doesn't increase quality above 50 when" do
+        shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=20, quality=50)])
+        shop.update_quality()
+        expect(shop.items[0].quality).to eq(50)
+      end
+      it "doesn't increase quality above 50 when sell_in <= 10" do
         shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49)])
         shop.update_quality()
         expect(shop.items[0].quality).to eq(50)
       end
-      it "doesn't increase quality above 50 when well_in <= 5" do
+      it "doesn't increase quality above 50 when sell_in <= 5" do
         shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49)])
         shop.update_quality()
         expect(shop.items[0].quality).to eq(50)

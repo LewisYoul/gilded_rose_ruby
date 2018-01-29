@@ -21,6 +21,7 @@ class GildedRose
   end
 
   private
+
   def update_brie(item)
     if item.name == @unique[:brie]
       increase_quality(item) if item.quality < 50
@@ -29,9 +30,10 @@ class GildedRose
 
   def update_pass(item)
     if item.name == @unique[:pass]
-      increase_quality(item)
+      increase_quality(item) if item.quality < 50
       increase_quality(item) if item.sell_in <= 10 && item.quality < 50
       increase_quality(item) if item.sell_in <= 5 && item.quality < 50
+      item.quality = 0 if item.sell_in < 0
     end
   end
 
