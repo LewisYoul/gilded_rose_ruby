@@ -26,6 +26,10 @@ describe GildedRose do
         @shop.update_quality()
         expect(@shop.items[0].sell_in).to eq(9)
       end
+      it "reduces the quality by 1 when a day passes" do
+        @shop.update_quality()
+        expect(@shop.items[0].quality).to eq(19)
+      end
     end
   end
 
