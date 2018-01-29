@@ -14,27 +14,32 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       reduce_sell_in(item)
-      if (!@unique.key(item.name))
-        update_generic(item)
-      elsif item.name == @unique[:brie]
-        increase_quality(item) if item.quality < 50
-      elsif item.name == @unique[:pass]
-        update_pass(item)
-      end
+      update_generic(item)
+      update_brie(item)
+      update_pass(item)
     end
   end
 
   private
+  def update_brie(item)
+    if item.name == @unique[:brie]
+      increase_quality(item) if item.quality < 50
+    end
+  end
 
   def update_pass(item)
-    increase_quality(item)
-    increase_quality(item) if item.sell_in <= 10 && item.quality < 50
-    increase_quality(item) if item.sell_in <= 5 && item.quality < 50
+    if item.name == @unique[:pass]
+      increase_quality(item)
+      increase_quality(item) if item.sell_in <= 10 && item.quality < 50
+      increase_quality(item) if item.sell_in <= 5 && item.quality < 50
+    end
   end
 
   def update_generic(item)
-    decrease_quality(item) if item.quality > 0
-    decrease_quality(item) if item.sell_in < 0
+    if !@unique.key(item.name)
+      decrease_quality(item) if item.quality > 0
+      decrease_quality(item) if item.sell_in < 0
+    end
   end
 
   def reduce_sell_in(item)

@@ -96,6 +96,11 @@ describe GildedRose do
         shop.update_quality()
         expect(shop.items[0].quality).to eq(50)
       end
+      it "resets quality to 0 when sell_in is passed" do
+        shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=50)])
+        shop.update_quality()
+        expect(shop.items[0].quality).to eq(0)
+      end
     end
   end
 
