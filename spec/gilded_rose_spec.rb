@@ -5,6 +5,8 @@ describe GildedRose do
   before(:each) do
     @items = [
       Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20),
+      Item.new(name="+5 Dexterity Vest", sell_in=10, quality=0),
+      Item.new(name="+5 Dexterity Vest", sell_in=-1, quality=10),
       Item.new(name="Aged Brie", sell_in=2, quality=0),
       Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7),
       Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80),
@@ -29,6 +31,21 @@ describe GildedRose do
       it "reduces the quality by 1 when a day passes" do
         @shop.update_quality()
         expect(@shop.items[0].quality).to eq(19)
+      end
+      it "doesn't reduce quality by 1 if already at 0" do
+        @shop.update_quality()
+        expect(@shop.items[1].quality).to eq(0)
+      end
+      it "reduces the quality by 2 if the sell_in is negative" do
+        @shop.update_quality()
+        expect(@shop.items[2].quality).to eq(8)
+      end
+    end
+
+    describe "Aged Brie" do
+      it "reduces sell_in by 1 when a day passes" do
+        @shop.update_quality()
+        expect(@shop.items[3].sell_in).to eq(1)
       end
     end
   end
