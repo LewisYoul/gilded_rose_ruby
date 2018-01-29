@@ -16,7 +16,6 @@ describe GildedRose do
       Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=40), #9
       Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=40), #10
       # This Conjured item does not work properly yet
-      Item.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
     ]
 
     @shop = GildedRose.new(@items)
@@ -105,6 +104,19 @@ describe GildedRose do
         shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=50)])
         shop.update_quality()
         expect(shop.items[0].quality).to eq(0)
+      end
+    end
+
+    describe "Conjured Items" do
+      it "decreases sell_in by 1" do
+        shop = GildedRose.new([Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)])
+        shop.update_quality()
+        expect(shop.items[0].sell_in).to eq(2)
+      end
+      it "decreases quality by 2" do
+        shop = GildedRose.new([Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)])
+        shop.update_quality()
+        expect(shop.items[0].quality).to eq(4)
       end
     end
   end

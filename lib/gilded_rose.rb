@@ -7,7 +7,8 @@ class GildedRose
     @unique = {
       brie: "Aged Brie",
       sulfuras: "Sulfuras, Hand of Ragnaros",
-      pass: "Backstage passes to a TAFKAL80ETC concert"
+      pass: "Backstage passes to a TAFKAL80ETC concert",
+      conjured: "Conjured Mana Cake"
     }
   end
 
@@ -17,6 +18,7 @@ class GildedRose
       update_generic(item)
       update_brie(item)
       update_pass(item)
+      item.quality -= 2 if item.name == @unique[:conjured]
     end
   end
 
