@@ -20,6 +20,11 @@ class GildedRose
       elsif item.name == @unique[:brie]
         item.sell_in -= 1
         item.quality += 1 if item.quality < 50
+      elsif item.name == @unique[:pass]
+        item.sell_in -= 1
+        item.quality += 1
+        item.quality += 1 if item.sell_in <= 10 && item.quality < 50
+        item.quality += 1 if item.sell_in <= 5 && item.quality < 50
       end
     end
   end
