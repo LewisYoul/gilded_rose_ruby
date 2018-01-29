@@ -4,17 +4,17 @@ describe GildedRose do
 
   before(:each) do
     @items = [
-      Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20),
-      Item.new(name="+5 Dexterity Vest", sell_in=10, quality=0),
-      Item.new(name="+5 Dexterity Vest", sell_in=-1, quality=10),
-      Item.new(name="Aged Brie", sell_in=2, quality=0),
-      Item.new(name="Aged Brie", sell_in=2, quality=50),
-      Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7),
-      Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80),
-      Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80),
-      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
-      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49),
-      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
+      Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20), #0
+      Item.new(name="+5 Dexterity Vest", sell_in=10, quality=0), #1
+      Item.new(name="+5 Dexterity Vest", sell_in=-1, quality=10), #2
+      Item.new(name="Aged Brie", sell_in=2, quality=0), #3
+      Item.new(name="Aged Brie", sell_in=2, quality=50), #4
+      Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7), #5
+      Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80), #6
+      Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80), #7
+      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20), #8
+      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=40), #9
+      Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=40), #10
       # This Conjured item does not work properly yet
       Item.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
     ]
@@ -66,6 +66,35 @@ describe GildedRose do
       it "doesn't increase the quality by 1" do
         @shop.update_quality()
         expect(@shop.items[6].quality).to eq(80)
+      end
+    end
+
+    describe "Backstage Passes" do
+      it "decreases sell_in by 1" do
+        @shop.update_quality()
+        expect(@shop.items[8].sell_in).to eq(14)
+      end
+      it "increases quality by 1" do
+        @shop.update_quality()
+        expect(@shop.items[8].quality).to eq(21)
+      end
+      it "increases quality by 2 if there are 10 days or less to expiry" do
+        @shop.update_quality()
+        expect(@shop.items[9].quality).to eq(42)
+      end
+      it "increases quality by 3 if there are 5 days or less to expiry" do
+        @shop.update_quality()
+        expect(@shop.items[10].quality).to eq(43)
+      end
+      it "doesn't increase quality above 50 when well_in <= 10" do
+        shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49)])
+        shop.update_quality()
+        expect(shop.items[0].quality).to eq(50)
+      end
+      it "doesn't increase quality above 50 when well_in <= 5" do
+        shop = GildedRose.new([Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49)])
+        shop.update_quality()
+        expect(shop.items[0].quality).to eq(50)
       end
     end
   end
